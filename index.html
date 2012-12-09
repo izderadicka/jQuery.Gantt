@@ -1,4 +1,4 @@
-﻿<!doctype html>
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en-au">
     <head>
         <title>jQuery.Gantt</title>
@@ -14,7 +14,7 @@
 				padding: 0 0 50px 0;
 			}
 			.contain {
-				width: 800px;
+				width: 1200px;
 				margin: 0 auto;
 			}
 			h1 {
@@ -427,103 +427,25 @@ values: [{
     </body>
 	<script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
 	<script src="js/jquery.fn.gantt.js"></script>
-	<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tooltip.js"></script>
-	<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-popover.js"></script>
-	<script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script>
-    <script>
+	
+    <script type="teext/jscript" ">
 
 		$(function() {
 
 			"use strict";
 
 			$(".gantt").gantt({
-				source: [{
-					name: "Sprint 0",
-					desc: "Analysis",
-					values: [{
-						from: "/Date(1320192000000)/",
-						to: "/Date(1322401600000)/",
-						label: "Requirement Gathering", 
-						customClass: "ganttRed"
-					}]
-				},{
-					name: " ",
-					desc: "Scoping",
-					values: [{
-						from: "/Date(1322611200000)/",
-						to: "/Date(1323302400000)/",
-						label: "Scoping", 
-						customClass: "ganttRed"
-					}]
-				},{
-					name: "Sprint 1",
-					desc: "Development",
-					values: [{
-						from: "/Date(1323802400000)/",
-						to: "/Date(1325685200000)/",
-						label: "Development", 
-						customClass: "ganttGreen"
-					}]
-				},{
-					name: " ",
-					desc: "Showcasing",
-					values: [{
-						from: "/Date(1325685200000)/",
-						to: "/Date(1325695200000)/",
-						label: "Showcasing", 
-						customClass: "ganttBlue"
-					}]
-				},{
-					name: "Sprint 2",
-					desc: "Development",
-					values: [{
-						from: "/Date(1326785200000)/",
-						to: "/Date(1325785200000)/",
-						label: "Development", 
-						customClass: "ganttGreen"
-					}]
-				},{
-					name: " ",
-					desc: "Showcasing",
-					values: [{
-						from: "/Date(1328785200000)/",
-						to: "/Date(1328905200000)/",
-						label: "Showcasing", 
-						customClass: "ganttBlue"
-					}]
-				},{
-					name: "Release Stage",
-					desc: "Training",
-					values: [{
-						from: "/Date(1330011200000)/",
-						to: "/Date(1336611200000)/",
-						label: "Training", 
-						customClass: "ganttOrange"
-					}]
-				},{
-					name: " ",
-					desc: "Deployment",
-					values: [{
-						from: "/Date(1336611200000)/",
-						to: "/Date(1338711200000)/",
-						label: "Deployment", 
-						customClass: "ganttOrange"
-					}]
-				},{
-					name: " ",
-					desc: "Warranty Period",
-					values: [{
-						from: "/Date(1336611200000)/",
-						to: "/Date(1349711200000)/",
-						label: "Warranty Period", 
-						customClass: "ganttOrange"
-					}]
-				}],
+				source: [
+{"name":"Contracts","desc":"EMEA","values": [{"from":"\/Date(1354816800000)\/","to":"\/Date(1354827600000)\/","label":"Task 3","desc":"uyioquwioeiuorqwe\noiyerqwiouryiueqwy\niuyuyuiqyweyrui\nioyuoiqrwyeruyqwu","customClass":"all_emea","dataObj": {"id":"3"}}]}
+,{"name":"Quoting","desc":"MEA","values": [{"from":"\/Date(1354789800000)\/","to":"\/Date(1354831200000)\/","label":"Cov1","desc":"hdfakjhdfkj\nkjfdhjhfdkjas\nkjfdskjahfjkdsa","customClass":"Regular","dataObj": {"id":"1"}}]}
+,{"name":"Quoting","desc":"MEA","values": [{"from":"\/Date(1354876200000)\/","to":"\/Date(1354896000000)\/","label":"task2","desc":"khjfajkhdsjkfhdfkj\nlkfoiuroiquewoi\noiuerqwoinmeqrn\noieqoiuewiu","customClass":"on_call","dataObj": {"id":"2"}}]}
+]
+,
 				navigate: "scroll",
-				scale: "weeks",
+				scale: "hours",
 				maxScale: "months",
-				minScale: "days",
-				itemsPerPage: 10,
+				minScale: "hours",
+				itemsPerPage: 100,
 				onItemClick: function(data) {
 					alert("Item clicked - show some details");
 				},
@@ -537,16 +459,8 @@ values: [{
 				}
 			});
 
-			$(".gantt").popover({
-				selector: ".bar",
-				title: "I'm a popover",
-				content: "And I'm the content of said popover.",
-				trigger: "hover"
-			});
-
-			prettyPrint();
-
+			
 		});
 
-    </script>
+</script>
 </html>

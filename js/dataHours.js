@@ -1,12 +1,21 @@
 [{ "name": "Task#1",
-  "desc": "",
+  "desc": "desc",
   "values": [
             {"from":  "/Date(1296547200000)/", "to": "/Date(1296554400000)/", "desc": "<b>Task #</b>1<br><b>Data</b>: [2011-02-01 08:00:00 - 2011-02-01 10:00:00] ", "customClass": "ganttRed", "label": "Task #1"},
             {"from":  "/Date(1296637200000)/", "to": "/Date(1296649800000)/", "desc": "<b>Task #</b>1<br><b>Data</b>: [2011-02-02 09:00:00 - 2011-02-02 12:30:00] ", "customClass": "ganttOrange", "label": "Task #1"}
   ]
 },
+
+{ "name": "Task#1",
+  "desc": "other",
+  "values": [
+            {"from":  "/Date(1296547200000)/", "to": "/Date(1296554400000)/", "desc": "<b>Task #</b>1<br><b>Data</b>: [2011-02-01 08:00:00 - 2011-02-01 10:00:00] ", "customClass": "ganttRed", "label": "Task #1"},
+            {"from":  "/Date(1296637200000)/", "to": "/Date(1296649800000)/", "desc": "<b>Task #</b>1<br><b>Data</b>: [2011-02-02 09:00:00 - 2011-02-02 12:30:00] ", "customClass": "ganttOrange", "label": "Task #1"}
+  ]
+},
+
 { "name": "Task#2",
-  "desc": "",
+  "desc": "Desc2",
   "values": [
             {"from":  "/Date(1296554400000)/", "to": "/Date(1296568800000)/", "desc": "<b>Task #</b>2<br><b>Data</b>: [2011-02-01 10:00:00 - 2011-02-01 14:00:00] ", "customClass": "ganttRed", "label": "Task #2"},
             {"from":  "/Date(1296653400000)/", "to": "/Date(1296658800000)/", "desc": "<b>Task #</b>2<br><b>Data</b>: [2011-02-02 13:30:00 - 2011-02-02 15:00:00] ", "customClass": "ganttGreen"}

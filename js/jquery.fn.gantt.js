@@ -223,7 +223,7 @@
                 element.dateStart = tools.getMinDate(element);
                 element.dateEnd = tools.getMaxDate(element);
 
-
+								if (! element.dateStart || ! element.dateEnd) return;
                 /* core.render(element); */
                 core.waitToggle(element, true, function () { core.render(element); });
             },
@@ -398,7 +398,7 @@
 
                     // Dispatch user registered function with the DateTime in ms
                     // and the id if the clicked object is a row
-                    settings.onAddClick(dt, rowId);
+                    settings.onAddClick(dt, rowId, col.attr('repdate'));
                 });
                 return dataPanel;
             },
@@ -757,9 +757,10 @@
                 // Scrolling navigation is provided by setting
                 // `settings.navigate='scroll'`
                 if (settings.navigate === "scroll") {
-                    ganttNavigate = $('<div class="navigate" />')
-                        .append($('<div class="nav-slider" />')
-                            .append($('<div class="nav-slider-left" />')
+                	var nav= ganttNavigate = $('<div class="navigate" />');
+                  if (element.pageCount>1) {
+                   						nav.append($('<div class="nav-slider-left" />')
+                               
                                 .append($('<span role="button" class="nav-link nav-page-back"/>')
                                     .html('&lt;')
                                     .click(function () {
@@ -773,38 +774,10 @@
                                     .click(function () {
                                         core.navigatePage(element, 1);
                                     }))
-                                .append($('<span role="button" class="nav-link nav-now"/>')
-                                    .html('&#9679;')
-                                    .click(function () {
-                                        core.navigateTo(element, 'now');
-                                    }))
-                                .append($('<span role="button" class="nav-link nav-prev-week"/>')
-                                    .html('&lt;&lt;')
-                                    .click(function () {
-                                        if (settings.scale === 'hours') {
-                                            core.navigateTo(element, tools.getCellSize() * 8);
-                                        } else if (settings.scale === 'days') {
-                                            core.navigateTo(element, tools.getCellSize() * 30);
-                                        } else if (settings.scale === 'weeks') {
-                                            core.navigateTo(element, tools.getCellSize() * 12);
-                                        } else if (settings.scale === 'months') {
-                                            core.navigateTo(element, tools.getCellSize() * 6);
-                                        }
-                                    }))
-                                .append($('<span role="button" class="nav-link nav-prev-day"/>')
-                                    .html('&lt;')
-                                    .click(function () {
-                                        if (settings.scale === 'hours') {
-                                            core.navigateTo(element, tools.getCellSize() * 4);
-                                        } else if (settings.scale === 'days') {
-                                            core.navigateTo(element, tools.getCellSize() * 7);
-                                        } else if (settings.scale === 'weeks') {
-                                            core.navigateTo(element, tools.getCellSize() * 4);
-                                        } else if (settings.scale === 'months') {
-                                            core.navigateTo(element, tools.getCellSize() * 3);
-                                        }
-                                    })))
-                            .append($('<div class="nav-slider-content" />')
+                                
+                                ) };
+                                
+                            nav
                                     .append($('<div class="nav-slider-bar" />')
                                             .append($('<a class="nav-slider-button" />')
                                                 )
@@ -821,34 +794,9 @@
                                                     }
                                                 })
                                             )
-                                        )
+                                        
                             .append($('<div class="nav-slider-right" />')
-                                .append($('<span role="button" class="nav-link nav-next-day"/>')
-                                    .html('&gt;')
-                                    .click(function () {
-                                        if (settings.scale === 'hours') {
-                                            core.navigateTo(element, tools.getCellSize() * -4);
-                                        } else if (settings.scale === 'days') {
-                                            core.navigateTo(element, tools.getCellSize() * -7);
-                                        } else if (settings.scale === 'weeks') {
-                                            core.navigateTo(element, tools.getCellSize() * -4);
-                                        } else if (settings.scale === 'months') {
-                                            core.navigateTo(element, tools.getCellSize() * -3);
-                                        }
-                                    }))
-                            .append($('<span role="button" class="nav-link nav-next-week"/>')
-                                    .html('&gt;&gt;')
-                                    .click(function () {
-                                        if (settings.scale === 'hours') {
-                                            core.navigateTo(element, tools.getCellSize() * -8);
-                                        } else if (settings.scale === 'days') {
-                                            core.navigateTo(element, tools.getCellSize() * -30);
-                                        } else if (settings.scale === 'weeks') {
-                                            core.navigateTo(element, tools.getCellSize() * -12);
-                                        } else if (settings.scale === 'months') {
-                                            core.navigateTo(element, tools.getCellSize() * -6);
-                                        }
-                                    }))
+                                                            
                                 .append($('<span role="button" class="nav-link nav-zoomIn"/>')
                                     .html('&#43;')
                                     .click(function () {
@@ -859,8 +807,7 @@
                                     .click(function () {
                                         core.zoomInOut(element, 1);
                                     }))
-                                    )
-                                );
+                                    );
                     $(document).mouseup(function () {
                         element.scrollNavigation.scrollerMouseDown = false;
                     });
@@ -1012,15 +959,21 @@
                             switch (settings.scale) {
                                 // **Hourly data**
                                 case "hours":
-                                    var dFrom = tools.genId(tools.dateDeserialize(day.from).getTime(), element.scaleStep);
+                                    var secsPerPixel=tools.getCellSize()/(3600*element.scaleStep);
+                                		var date_from=tools.dateDeserialize(day.from).getTime();
+                                    var dFrom = tools.genId(date_from, element.scaleStep);
                                     var from = $(element).find('#dh-' + dFrom);
-
-                                    var dTo = tools.genId(tools.dateDeserialize(day.to).getTime(), element.scaleStep);
+																		var date_to = tools.dateDeserialize(day.to).getTime();
+                                    var dTo = tools.genId(date_to, element.scaleStep);
                                     var to = $(element).find('#dh-' + dTo);
 
-                                    var cFrom = from.attr("offset");
-                                    var cTo = to.attr("offset");
-                                    var dl = Math.floor((cTo - cFrom) / tools.getCellSize()) + 1;
+                                    var cFrom = parseInt(from.attr("offset")) -tools.getCellSize() 
+                                    + Math.round(secsPerPixel*(date_from-dFrom)/1000)
+                                    
+                                    var cTo = parseInt(to.attr("offset"))  - tools.getCellSize()
+                                    +Math.round(secsPerPixel*(date_to-dTo)/1000);
+                                    
+                                    var dl = (cTo - cFrom) / tools.getCellSize();
 
                                     _bar = core.createProgressBar(
                                                 dl,
@@ -1128,7 +1081,7 @@
                                     var dTo = tools.genId(tools.dateDeserialize(day.to).getTime());
 
                                     var from = $(element).find("#dh-" + dFrom);
-                                    var cFrom = from.attr("offset");
+                                    var cFrom = from.attr("offset")-tools.getCellSize(); // if day we start at begining of the cell
 
                                     var dl = Math.floor(((dTo / 1000) - (dFrom / 1000)) / 86400) + 1;
                                     _bar = core.createProgressBar(
@@ -1442,12 +1395,15 @@
             // Return the maximum available date in data depending on the scale
             getMaxDate: function (element) {
                 var maxDate = null;
+                if (settings.endDate) maxDate = settings.endDate;
+                else {
                 $.each(element.data, function (i, entry) {
                     $.each(entry.values, function (i, date) {
                         maxDate = maxDate < tools.dateDeserialize(date.to) ? tools.dateDeserialize(date.to) : maxDate;
                     });
                 });
-
+                }
+								if (! maxDate) return;
                 switch (settings.scale) {
                     case "hours":
                         maxDate.setHours(Math.ceil((maxDate.getHours()) / element.scaleStep) * element.scaleStep);
@@ -1474,16 +1430,22 @@
 
             // Return the minimum available date in data depending on the scale
             getMinDate: function (element) {
-                var minDate = null;
+            	 var minDate = null;
+            	 if (settings.startDate) minDate=settings.startDate;
+            	 else {
+                
                 $.each(element.data, function (i, entry) {
                     $.each(entry.values, function (i, date) {
                         minDate = minDate > tools.dateDeserialize(date.from) || minDate === null ? tools.dateDeserialize(date.from) : minDate;
                     });
                 });
+               }
+                if (!minDate) return;
                 switch (settings.scale) {
                     case "hours":
                         minDate.setHours(Math.floor((minDate.getHours()) / element.scaleStep) * element.scaleStep);
                         minDate.setHours(minDate.getHours() - element.scaleStep * 3);
+                        minDate=new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate(), minDate.getHours())
                         break;
                     case "weeks":
                         var bd = new Date(minDate.getTime());
@@ -1580,7 +1542,8 @@
             dateDeserialize: function (dateStr) {
                 //return eval("new" + dateStr.replace(/\//g, " "));
                 var date = eval("new" + dateStr.replace(/\//g, " "));
-                return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes());
+                return date
+                //return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes());
             },
 
             // Generate an id for a date
