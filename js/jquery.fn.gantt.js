@@ -1395,7 +1395,7 @@
             // Return the maximum available date in data depending on the scale
             getMaxDate: function (element) {
                 var maxDate = null;
-                if (settings.endDate) maxDate = settings.endDate;
+                if (settings.endDate) maxDate = new Date(settings.endDate);
                 else {
                 $.each(element.data, function (i, entry) {
                     $.each(entry.values, function (i, date) {
@@ -1431,7 +1431,7 @@
             // Return the minimum available date in data depending on the scale
             getMinDate: function (element) {
             	 var minDate = null;
-            	 if (settings.startDate) minDate=settings.startDate;
+            	 if (settings.startDate) minDate=new Date(settings.startDate);
             	 else {
                 
                 $.each(element.data, function (i, entry) {

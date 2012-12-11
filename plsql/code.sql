@@ -1,7 +1,7 @@
 c_epoch_tz CONSTANT timestamp with time zone := to_timestamp_tz('1970-01-01 0:00', 'YYYY-MM-DD TZH:TZM');
 c_epoch CONSTANT timestamp := to_timestamp('1970-01-01', 'YYYY-MM-DD');
 
-FUNCTION time_ms_tz(time_in timestamp with time zone) RETURN int DETERMINISTIC PARALLEL_ENABLE AS
+FUNCTION time_ms_tz(time_in timestamp with time zone) RETURN int  AS
 diff interval day(9) to second(9) := time_in at time zone 'GMT' - c_epoch_tz;
 BEGIN
 RETURN 1000* (extract(day from diff) * 86400
@@ -11,7 +11,7 @@ RETURN 1000* (extract(day from diff) * 86400
 ;
 END;
 
-FUNCTION time_ms(time_in timestamp with time zone) RETURN int DETERMINISTIC PARALLEL_ENABLE AS
+FUNCTION time_ms(time_in timestamp with time zone) RETURN int  AS
 diff interval day(9) to second(9) := time_in - c_epoch;
 BEGIN
 RETURN 1000 *(extract(day from diff) * 86400
@@ -43,6 +43,8 @@ IS
    l_from_date_item apex_application_page_regions.attribute_01%type := p_region.attribute_01;
    l_to_date_item apex_application_page_regions.attribute_02%type := p_region.attribute_02;
    l_additional_params  apex_application_page_regions.attribute_03%type := p_region.attribute_03;
+   l_date_format   apex_appl_plugins.attribute_01%TYPE := p_plugin.attribute_01;
+   
    
    l_crlf           CHAR(2) := CHR(13)||CHR(10);
    
@@ -62,26 +64,30 @@ BEGIN
 
    apex_javascript.add_library(
       p_name      => 'gantt',
-      p_directory => 'http://localhost/gantt/js/',
+      --p_directory => 'http://localhost/gantt/js/',
+      p_directory => p_plugin.file_prefix,
       p_version   => NULL
    );
 
    apex_javascript.add_library (
-      p_name      => 'jquery.fn.gantt',
-      p_directory => 'http://localhost/gantt/js/',
+      p_name      => 'jquery.fn.gantt.min',
+      --p_directory => 'http://localhost/gantt/js/',
+      p_directory=> p_plugin.file_prefix,
       p_version   => NULL
    );
    
     apex_javascript.add_library (
-      p_name      => 'date-lib',
-      p_directory => 'http://localhost/gantt/js/',
+      p_name      => 'date-lib.min',
+      --p_directory => 'http://localhost/gantt/js/',
+      p_directory => p_plugin.file_prefix,
       p_version   => NULL
    );
 
   
   apex_css.add_file(
       p_name      => 'style',
-      p_directory => 'http://localhost/gantt/css/',
+      --p_directory => 'http://localhost/gantt/css/',
+      p_directory => p_plugin.file_prefix,
       p_version   => NULL
    );
    
@@ -92,7 +98,8 @@ BEGIN
    l_onload_code := 'apexGantt.create("' || p_region.static_id || '", "' 
                                   || apex_plugin.get_ajax_identifier() || '", "' 
                                   || l_from_date_item || '", "' 
-                                  || l_to_date_item
+                                  || l_to_date_item|| '", "' 
+                                  || l_date_format
                                   || '", '|| l_additional_params || ');';
      
 
@@ -119,7 +126,8 @@ IS
    l_data_type_list    wwv_flow_global.vc_arr2;
   
 --  SELECT ROW_NAME, ROW_DESC, ID as TASK_ID, TASK_FROM, TASK_TO, TASK_LABEL, TASK_DESCRIPTION, TASK_TYPE
-   
+  
+  l_row_id     VARCHAR2(50); 
   l_row_name   VARCHAR2(2000);
   l_row_desc   VARCHAR(32767);
   l_task_id    VARCHAR(200);
@@ -129,29 +137,28 @@ IS
   l_task_desc  VARCHAR2(32767);
   l_task_type  VARCHAR2(200);
   l_crlf       CHAR(2) := CHR(13)||CHR(10);
-  l_prev_name  VARCHAR2(2000);
-  l_prev_desc  VARCHAR(32767); 
+  l_prev_name  VARCHAR2(2000) := NULL;
+  l_prev_desc  VARCHAR(32767) :=NULL; 
   
   l_length     number;
 
 BEGIN
    
---   l_window_start := TO_DATE(apex_application.g_x01, 'YYYYMMDD');
---   l_window_end := TO_DATE(apex_application.g_x02, 'YYYYMMDD');
-l_data_type_list(1):=apex_plugin_util.c_data_type_varchar2;
+l_data_type_list(1):=apex_plugin_util.c_data_type_number;
 l_data_type_list(2):=apex_plugin_util.c_data_type_varchar2;
-l_data_type_list(3):=apex_plugin_util.c_data_type_number;
-l_data_type_list(4):=apex_plugin_util.c_data_type_timestamp_ltz;
+l_data_type_list(3):=apex_plugin_util.c_data_type_varchar2;
+l_data_type_list(4):=apex_plugin_util.c_data_type_number;
 l_data_type_list(5):=apex_plugin_util.c_data_type_timestamp_ltz;
-l_data_type_list(6):=apex_plugin_util.c_data_type_varchar2;
+l_data_type_list(6):=apex_plugin_util.c_data_type_timestamp_ltz;
 l_data_type_list(7):=apex_plugin_util.c_data_type_varchar2;
 l_data_type_list(8):=apex_plugin_util.c_data_type_varchar2;
+l_data_type_list(9):=apex_plugin_util.c_data_type_varchar2;
 
 
    l_column_value_list := apex_plugin_util.get_data2(
       p_sql_statement  => p_region.source, 
-      p_min_columns    => 8, 
-      p_max_columns    => 8, 
+      p_min_columns    => 9, 
+      p_max_columns    => 9, 
       p_data_type_list => l_data_type_list,
       p_component_name => p_region.name
    );   
@@ -164,26 +171,30 @@ l_data_type_list(8):=apex_plugin_util.c_data_type_varchar2;
    l_length := l_column_value_list(1).value_list.count;
    FOR x IN 1 .. l_length
    LOOP
-      l_row_name := sys.htf.escape_sc(l_column_value_list(1).value_list(x).varchar2_value);
-      l_row_desc := sys.htf.escape_sc(l_column_value_list(2).value_list(x).varchar2_value);
-      l_task_id:=  to_char(l_column_value_list(3).value_list(x).number_value);
-      l_task_from :=  serialize_timestamp(l_column_value_list(4).value_list(x).timestamp_ltz_value);
-      l_task_to := serialize_timestamp(l_column_value_list(5).value_list(x).timestamp_ltz_value);
-      l_task_label := sys.htf.escape_sc(l_column_value_list(6).value_list(x).varchar2_value);
-      l_task_desc :=l_column_value_list(7).value_list(x).varchar2_value;
-      l_task_type := sys.htf.escape_sc(l_column_value_list(8).value_list(x).varchar2_value);
+      l_row_id:=  to_char(l_column_value_list(1).value_list(x).number_value);
+      l_row_name := sys.htf.escape_sc(l_column_value_list(2).value_list(x).varchar2_value);
+      l_row_desc := sys.htf.escape_sc(l_column_value_list(3).value_list(x).varchar2_value);
+      l_task_id:=  to_char(l_column_value_list(4).value_list(x).number_value);
+      l_task_from :=  serialize_timestamp(l_column_value_list(5).value_list(x).timestamp_ltz_value);
+      l_task_to := serialize_timestamp(l_column_value_list(6).value_list(x).timestamp_ltz_value);
+      l_task_label := sys.htf.escape_sc(l_column_value_list(7).value_list(x).varchar2_value);
+      l_task_desc :=l_column_value_list(8).value_list(x).varchar2_value;
+      l_task_type := sys.htf.escape_sc(l_column_value_list(9).value_list(x).varchar2_value);
   
-      if l_row_name!=l_prev_name and l_row_desc != l_prev_desc or l_prev_name is null then  
+      if l_row_name!=l_prev_name or l_row_desc != l_prev_desc or l_prev_name is null then  
         if l_prev_name is not null then 
           htp.p( ']},'); 
         end if;
-          l_prev_name:=l_row_name;
-          l_prev_desc:= l_row_desc;
+         
         
           sys.htp.p( '{'
-         || apex_javascript.add_attribute('name', l_row_name, TRUE, TRUE)
+          ||apex_javascript.add_attribute('id', l_row_id, TRUE, TRUE)
+         || apex_javascript.add_attribute('name', case when l_row_name!=l_prev_name or  l_prev_name is  null then 
+                l_row_name else ' ' end, TRUE, TRUE)
          || apex_javascript.add_attribute('desc', l_row_desc, TRUE, TRUE)
          || '"values": [');
+        l_prev_name:=l_row_name;
+        l_prev_desc:= l_row_desc;
       else  if x>1 then 
         htp.p(','); 
         end if;   

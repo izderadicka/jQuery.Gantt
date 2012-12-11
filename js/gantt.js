@@ -1,17 +1,15 @@
 var apexGantt = {};
 
 (function($) {
-	apexGantt.create = (function(id, ajaxIdentifier, pageItemFrom, pageItemTo, options) {
+	apexGantt.create = (function(id, ajaxIdentifier, pageItemFrom, pageItemTo, dateFormat, options) {
 		var that = {},
 				main=this,
-				dateFormat='d-MMM-y'
 				gantt = $('#' + id + '_GANTT'), 
 				region = $('#' + id);
 		options = options || {};
+		dateFormat=dateFormat || 'd-MMM-y';
 		main[id] = that
 
-		
-		
 		options = $.extend({
 			navigate : "scroll",
 			scale : "hours",
@@ -25,8 +23,8 @@ var apexGantt = {};
 			},
 			onAddClick : function(dt, rowId, date) {
 				date=new Date(parseInt(date));
-				//alert("Empty space clicked - add an item!" +date);
-				region.trigger('addnewtask', date)
+				//alert("Empty space clicked - at row!" +rowId);
+				region.trigger('addnewtask', {date:date, id:rowId})
 			},
 			onRender : function() {
 				if (window.console && typeof console.log === "function") {
