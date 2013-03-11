@@ -4,7 +4,7 @@
         <title>jQuery.Gantt</title>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1" >
-        <link rel="stylesheet" href="css/style.css" />
+        <link rel="stylesheet" href="css/style-old.css" />
         <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" />
         <link rel="stylesheet" href="http://taitems.github.com/UX-Lab/core/css/prettify.css" />
 		<style type="text/css">
@@ -428,20 +428,48 @@ values: [{
 	<script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
 	<script src="js/jquery.fn.gantt.js"></script>
 	
-    <script type="teext/jscript" ">
-
-		$(function() {
-
-			"use strict";
-
-			$(".gantt").gantt({
-				source: [
+  <script type="text/javascript">
+    
+    var data_old=[
 {"name":"Contracts","desc":"EMEA","values": [{"from":"\/Date(1354816800000)\/","to":"\/Date(1354827600000)\/","label":"Task 3","desc":"uyioquwioeiuorqwe\noiyerqwiouryiueqwy\niuyuyuiqyweyrui\nioyuoiqrwyeruyqwu","customClass":"all_emea","dataObj": {"id":"3"}}]}
 ,{"name":"Quoting","desc":"MEA","values": [{"from":"\/Date(1354789800000)\/","to":"\/Date(1354831200000)\/","label":"Cov1","desc":"hdfakjhdfkj\nkjfdhjhfdkjas\nkjfdskjahfjkdsa","customClass":"Regular","dataObj": {"id":"1"}}]}
 ,{"name":"Quoting","desc":"MEA","values": [{"from":"\/Date(1354876200000)\/","to":"\/Date(1354896000000)\/","label":"task2","desc":"khjfajkhdsjkfhdfkj\nlkfoiuroiquewoi\noiuerqwoinmeqrn\noieqoiuewiu","customClass":"on_call","dataObj": {"id":"2"}}]}
-]
+];
+
+		var data=[
+{"id":"22","name":"Approvals","desc":"Somewhere","values": [
+{"from":"\u002FDate(1354867200000)\u002F","to":"\u002FDate(1354879800000)\u002F","label":"appr","desc":"\u003Cb\u003Eappr\u003C\u002Fb\u003E\u003Cbr\u002F\u003EFrom:2012-12-07 09:00\u003Cbr\u002F\u003ETo:2012-12-07 12:30\u003Cbr\u002F\u003Ejhfakjsdhf","customClass":"apprto","dataObj": {"id":"22"}}
 ,
-				navigate: "scroll",
+{"from":"\u002FDate(1354805100000)\u002F","to":"\u002FDate(1354821300000)\u002F","desc":"\u003Cb\u003E\u003C\u002Fb\u003E\u003Cbr\u002F\u003EFrom:2012-12-06 15:45\u003Cbr\u002F\u003ETo:2012-12-06 20:15\u003Cbr\u002F\u003Edescproi","customClass":"uaaa","dataObj": {"id":"21"}}
+]},
+{"id":"3","name":"Contracts","desc":"EMEA","values": [
+{"from":"\u002FDate(1354816800000)\u002F","to":"\u002FDate(1354827600000)\u002F","label":"Task 3+","desc":"\u003Cb\u003ETask 3+\u003C\u002Fb\u003E\u003Cbr\u002F\u003EFrom:2012-12-06 19:00\u003Cbr\u002F\u003ETo:2012-12-06 22:00\u003Cbr\u002F\u003Euyioquwioeiuorqwe\u000D\u000Aoiyerqwiouryiueqwy\u000D\u000Aiuyuyuiqyweyrui\u000D\u000Aioyuoiqrwyeruyqwu","customClass":"ganttRed","dataObj": {"id":"3"}}
+]},
+{"id":"24","name":"Pradelna","desc":"nocni smena","values": [
+{"from":"\u002FDate(1354748400000)\u002F","to":"\u002FDate(1354779000000)\u002F","label":"nocni","desc":"\u003Cb\u003Enocni\u003C\u002Fb\u003E\u003Cbr\u002F\u003EFrom:2012-12-06 00:00\u003Cbr\u002F\u003ETo:2012-12-06 08:30\u003Cbr\u002F\u003Euioewu jhfdahjh jkhjdf","customClass":"ganttOrange","dataObj": {"id":"24"}}
+]},
+{"id":"1","name":"Quoting","desc":"MEA","values": [
+{"from":"\u002FDate(1354789800000)\u002F","to":"\u002FDate(1354831200000)\u002F","label":"Cov1","desc":"\u003Cb\u003ECov1\u003C\u002Fb\u003E\u003Cbr\u002F\u003EFrom:2012-12-06 11:30\u003Cbr\u002F\u003ETo:2012-12-06 23:00\u003Cbr\u002F\u003ENejaky vykutaleny ","customClass":"Regular","dataObj": {"id":"1"}}
+,
+{"from":"\u002FDate(1354876200000)\u002F","to":"\u002FDate(1354896000000)\u002F","label":"task2","desc":"\u003Cb\u003Etask2\u003C\u002Fb\u003E\u003Cbr\u002F\u003EFrom:2012-12-07 11:30\u003Cbr\u002F\u003ETo:2012-12-07 17:00\u003Cbr\u002F\u003Ekhjfajkhdsjkfhdfkj\u000D\u000Alkfoiuroiquewoi\u000D\u000Aoiuerqwoinmeqrn\u000D\u000Aoieqoiuewiu","customClass":"on_call","dataObj": {"id":"2"}}
+]},
+{"id":"44","name":" ","desc":"RoE","values": [
+{"from":"\u002FDate(1354888800000)\u002F","to":"\u002FDate(1354910400000)\u002F","label":"roe","desc":"\u003Cb\u003Eroe\u003C\u002Fb\u003E\u003Cbr\u002F\u003EFrom:2012-12-07 15:00\u003Cbr\u002F\u003ETo:2012-12-07 21:00\u003Cbr\u002F\u003Ehjfhadjshfkj","customClass":"ganttGreen","dataObj": {"id":"44"}}
+]},
+{"id":"23","name":"Zacapa","desc":"LAD","values": [
+{"from":"\u002FDate(1354921200000)\u002F","to":"\u002FDate(1355007600000)\u002F","label":"zacapa","desc":"\u003Cb\u003Ezacapa\u003C\u002Fb\u003E\u003Cbr\u002F\u003EFrom:2012-12-08 00:00\u003Cbr\u002F\u003ETo:2012-12-09 00:00\u003Cbr\u002F\u003Ejhfjasdhkj","customClass":"rum","dataObj": {"id":"23"}}
+,
+{"from":"\u002FDate(1354788000000)\u002F","to":"\u002FDate(1355316180000)\u002F","desc":"\u003Cb\u003E\u003C\u002Fb\u003E\u003Cbr\u002F\u003EFrom:2012-12-06 11:00\u003Cbr\u002F\u003ETo:2012-12-12 13:43\u003Cbr\u002F\u003E","dataObj": {"id":"66"}}
+,
+{"from":"\u002FDate(1354788000000)\u002F","to":"\u002FDate(1354812240000)\u002F","desc":"\u003Cb\u003E\u003C\u002Fb\u003E\u003Cbr\u002F\u003EFrom:2012-12-06 11:00\u003Cbr\u002F\u003ETo:2012-12-06 17:44\u003Cbr\u002F\u003Emmmmmmmmmmm","dataObj": {"id":"67"}}
+]}
+];
+
+		$(function() {
+
+			$(".gantt").gantt({
+				source: data,
+				navigate: "buttons_limited",
 				scale: "hours",
 				maxScale: "months",
 				minScale: "hours",

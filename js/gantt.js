@@ -11,7 +11,7 @@ var apexGantt = {};
 		main[id] = that
 
 		options = $.extend({
-			navigate : "scroll",
+			navigate : "buttons_limited",
 			scale : "hours",
 			maxScale : "days",
 			minScale : "hours",
