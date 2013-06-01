@@ -39,11 +39,29 @@ var apexGantt = {};
 			
 			return Date.parseString(dateStr, format)
 		}
+		
+		var safeSplit=function(str) {
+			var arr=str.split(',')
+			for (var i=0;i<arr.length;i+=1) {
+				arr[i]=arr[i].replace(/^\s+|\s+$/g, '')
+			}
+			return arr;
+		}
 
-		that.reloadData = function() {
+		that.reloadData = function(additionalItemsToSubmit) {
 
 			region.trigger('apexbeforerefresh');
-
+			var itemsToSubmit=[pageItemFrom, pageItemTo];
+			if (additionalItemsToSubmit) {
+				itemsToSubmit.push.apply(itemsToSubmit,safeSplit(additionalItemsToSubmit));
+			}
+			if (options.itemsToSubmit) {
+				itemsToSubmit.push.apply(itemsToSubmit,safeSplit(options.itemsToSubmit));
+			}
+			var valsToSubmit=[];
+			for (var i=0; i<itemsToSubmit.length;i+=1) {
+				valsToSubmit.push($v(itemsToSubmit[i]));
+			}
 			$.ajax({
 				type : 'POST',
 				url : 'wwv_flow.show',
@@ -52,8 +70,8 @@ var apexGantt = {};
 					p_flow_step_id : $v('pFlowStepId'),
 					p_instance : $v('pInstance'),
 					p_request : 'PLUGIN=' + ajaxIdentifier,
-					p_arg_names : [pageItemFrom, pageItemTo],
-					p_arg_values : [$v(pageItemFrom), $v(pageItemTo)]
+					p_arg_names : itemsToSubmit,
+					p_arg_values : valsToSubmit
 				},
 				dataType : 'json',
 				success : function(data) {
@@ -70,7 +88,7 @@ var apexGantt = {};
 				}
 			});
 		}
-
+    region.on('apexrefresh', function(event) {that.reloadData()});
 		that.reloadData()
 		return that
 	});

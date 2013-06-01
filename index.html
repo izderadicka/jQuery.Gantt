@@ -430,11 +430,7 @@ values: [{
 	
   <script type="text/javascript">
     
-    var data_old=[
-{"name":"Contracts","desc":"EMEA","values": [{"from":"\/Date(1354816800000)\/","to":"\/Date(1354827600000)\/","label":"Task 3","desc":"uyioquwioeiuorqwe\noiyerqwiouryiueqwy\niuyuyuiqyweyrui\nioyuoiqrwyeruyqwu","customClass":"all_emea","dataObj": {"id":"3"}}]}
-,{"name":"Quoting","desc":"MEA","values": [{"from":"\/Date(1354789800000)\/","to":"\/Date(1354831200000)\/","label":"Cov1","desc":"hdfakjhdfkj\nkjfdhjhfdkjas\nkjfdskjahfjkdsa","customClass":"Regular","dataObj": {"id":"1"}}]}
-,{"name":"Quoting","desc":"MEA","values": [{"from":"\/Date(1354876200000)\/","to":"\/Date(1354896000000)\/","label":"task2","desc":"khjfajkhdsjkfhdfkj\nlkfoiuroiquewoi\noiuerqwoinmeqrn\noieqoiuewiu","customClass":"on_call","dataObj": {"id":"2"}}]}
-];
+    
 
 		var data=[
 {"id":"22","name":"Approvals","desc":"Somewhere","values": [
@@ -468,10 +464,12 @@ values: [{
 		$(function() {
 
 			$(".gantt").gantt({
-				source: data,
+				source: [],
+				startDate: new Date(2013, 2, 31, 0, 0),
+				endDate: new Date(2013,3,1, 0, 0),
 				navigate: "buttons_limited",
 				scale: "hours",
-				maxScale: "months",
+				maxScale: "days",
 				minScale: "hours",
 				itemsPerPage: 100,
 				onItemClick: function(data) {

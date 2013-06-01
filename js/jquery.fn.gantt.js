@@ -331,6 +331,14 @@
                     }
                 });
                 ganttLeftPanel.append(entries.join(""));
+		// this will add tooltip for overflown labels in left panel
+		ganttLeftPanel
+    		.on('mouseenter', 'span.fn-label',  function (e) {
+    			var $this = $(this);
+
+    		if (this.offsetWidth < this.scrollWidth && !$this.attr('title'))
+        		$this.attr('title', $this.text()); });
+
                 return ganttLeftPanel;
             },
 
@@ -1529,15 +1537,21 @@
                 var ret = [];
                 var i = 0;
                 do {
-                    ret[i] = new Date(current.getTime());
-                    current.setHours(current.getHours() + scaleStep);
+                    ret[i] =current;
+                    
+                    //current.setHours(current.getHours() + scaleStep); // this one stucks on change to DST
+                    current=new Date(current.getTime() + scaleStep*3600000);
                     current.setHours(Math.floor((current.getHours()) / scaleStep) * scaleStep);
+                 
 
                     if (current.getDay() !== ret[i].getDay()) {
                         current.setHours(0);
                     }
 
                     i++;
+                    if (i>100000) {
+                    	throw "Too much hours";
+                    }
                 } while (current.getTime() <= to.getTime());
                 return ret;
             },
